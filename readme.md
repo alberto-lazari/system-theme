@@ -1,4 +1,4 @@
-# system-theme
+# ☀️ system-theme 🌙
 
 A simple command that lets you switch between light and dark mode in macOS from the command-line and run custom commands on theme change
 
@@ -17,10 +17,10 @@ You can use the file to update the colorscheme of programs that don't support ma
 
 Here's an example to let Alacritty change colorscheme (some specific configuration is needed)
 
-```bash
+```shell
 # Link your colorscheme file to current theme
-# The $system_theme variable is either 'light' or 'dark' and is always
-# available in `themerc`
+# The $system_theme variable is either 'light' or 'dark'
+# and is always available in `themerc`
 ln -fs ~/.config/alacritty/colorscheme/$system_theme.toml \
   ~/.config/alacritty/colors.toml
 # Trigger config reload
