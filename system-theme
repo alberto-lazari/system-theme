@@ -1,0 +1,96 @@
+#!/bin/bash
+set -e
+
+SYSTEM_THEME_VERSION=1.0.0
+: ${SYSTEM_THEME_RC:=$HOME/.config/system-theme/themerc}
+
+short_usage='usage: system-theme [-hlv] [theme]'
+
+print_usage () {
+  cat >&2 <<- EOF
+	$short_usage
+	Manage macOS system theme from CLI
+
+	arguments:
+	  <no-args>      print current theme
+	  theme          [optional] theme to switch to (light|dark)
+	options:
+    -l, --load-rc  load themerc file and exit
+	  -h, --help     show this message
+	  -v, --version  print version number
+	EOF
+}
+
+# Run custom commands to update programs themes
+load_rc () {
+  [[ ! -f "$SYSTEM_THEME_RC" ]] ||
+    source "$SYSTEM_THEME_RC"
+}
+
+error () {
+  echo >&2 $*
+  exit 1
+}
+
+[[ $(uname) = Darwin ]] ||
+  error OS not supported
+
+# Read current theme
+# The `defaults` command correctly outputs only when on dark mode, fails otherwise
+current_theme=dark
+[[ $(defaults read -g AppleInterfaceStyle 2> /dev/null) = Dark ]] ||
+  current_theme=light
+
+while (( $# > 0 )); do
+  case "$1" in
+    -l | --load-rc)
+      export system_theme="$current_theme"
+      load_rc
+      exit 0
+      ;;
+    -h | --help)
+      print_usage
+      exit 0
+      ;;
+    -v | --version)
+      echo system-theme $SYSTEM_THEME_VERSION
+      exit 0
+      ;;
+    -*)
+      echo >&2 system-theme: illegal option \'$1\'
+      error $short_usage
+      ;;
+    *)
+      theme="$1" ;;
+  esac
+
+  shift
+done
+
+[[ -n "$theme" ]] || {
+  # Just output the current theme with no args
+  echo "$current_theme"
+  exit 0
+}
+
+shopt -s nocasematch
+# If not changing the theme do nothing
+[[ "$theme" != "$current_theme" ]] ||
+  exit 0
+
+case "$theme" in
+  dark) dark_mode_enabled=true ;;
+  light) dark_mode_enabled=false ;;
+  *)
+    echo >&2 "Only 'dark' and 'light' themes are supported"
+    error $short_usage
+    ;;
+esac
+shopt -u nocasematch
+
+# Set the system theme
+set_theme="set dark mode to $dark_mode_enabled"
+osascript -e "tell app \"System Events\" to tell appearance preferences to $set_theme"
+
+export system_theme="$theme"
+load_rc
