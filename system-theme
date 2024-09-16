@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-SYSTEM_THEME_VERSION=1.0.0
+SYSTEM_THEME_VERSION=1.0.2
 : ${SYSTEM_THEME_RC:=$HOME/.config/system-theme/themerc}
 
 short_usage='usage: system-theme [-hlv] [theme]'
@@ -12,12 +12,13 @@ print_usage () {
 	Manage macOS system theme from CLI
 
 	arguments:
-	  <no-args>      print current theme
-	  theme          [optional] theme to switch to (light|dark)
+	  <no-args>       print current theme
+	  theme           [optional] theme to switch to (light|dark)
 	options:
-	  -l, --load-rc  load themerc file and exit
-	  -h, --help     show this message
-	  -v, --version  print version number
+	  -l, --load-rc   load themerc file and exit
+	  -s, --gen-rc    generate themerc commands, substituting \$system_theme
+	  -h, --help      show this message
+	  -v, --version   print version number
 	EOF
 }
 
@@ -48,12 +49,23 @@ while (( $# > 0 )); do
       load_rc
       exit 0
       ;;
+    -s | --rc-commands)
+      cat <<- EOF
+			export system_theme="$current_theme"
+
+			$(< "$SYSTEM_THEME_RC")
+
+			# Do not pollute env
+			unset system_theme
+			EOF
+      exit 0
+      ;;
     -h | --help)
       print_usage
       exit 0
       ;;
     -v | --version)
-      echo system-theme $SYSTEM_THEME_VERSION
+      echo system-theme v$SYSTEM_THEME_VERSION
       exit 0
       ;;
     -*)
