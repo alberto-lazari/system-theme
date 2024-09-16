@@ -2,6 +2,8 @@
 
 A simple command that lets you switch between light and dark mode in macOS from the command-line and run custom commands on theme change
 
+![system-theme demo](https://raw.github.com/alberto-lazari/system-theme/main/.github/demo.webp)
+
 ## Usage
 
 Switch to light/dark mode with `system-theme light` or `system-theme dark`
