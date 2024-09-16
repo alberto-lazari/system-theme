@@ -4,6 +4,14 @@ A simple command that lets you switch between light and dark mode in macOS from 
 
 ![system-theme demo](https://raw.github.com/alberto-lazari/system-theme/main/.github/demo.webp)
 
+## Install
+
+#### Homebrew
+
+```bash
+brew install alberto-lazari/formulae/system-theme
+```
+
 ## Usage
 
 Switch to light/dark mode with `system-theme light` or `system-theme dark`

@@ -4,7 +4,7 @@ set -e
 SYSTEM_THEME_VERSION=1.0.2
 : ${SYSTEM_THEME_RC:=$HOME/.config/system-theme/themerc}
 
-short_usage='usage: system-theme [-hlv] [theme]'
+short_usage='usage: system-theme [-hlsv] [theme]'
 
 print_usage () {
   cat >&2 <<- EOF
@@ -49,7 +49,7 @@ while (( $# > 0 )); do
       load_rc
       exit 0
       ;;
-    -s | --rc-commands)
+    -s | --gen-rc)
       cat <<- EOF
 			export system_theme="$current_theme"
 
