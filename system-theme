@@ -15,7 +15,7 @@ print_usage () {
 	  <no-args>      print current theme
 	  theme          [optional] theme to switch to (light|dark)
 	options:
-    -l, --load-rc  load themerc file and exit
+	  -l, --load-rc  load themerc file and exit
 	  -h, --help     show this message
 	  -v, --version  print version number
 	EOF
